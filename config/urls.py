@@ -14,8 +14,8 @@ urlpatterns = [
     path("produtos/", include("apps.products.urls")),
 
     # Orders
-    path("pedidos/", include("apps.orders.urls")),
+    #path("pedidos/", include("apps.orders.urls")),
 
     # Inventory
-    path("estoque/", include("apps.inventory.urls")),
+    #path("estoque/", include("apps.inventory.urls")),
 ]
