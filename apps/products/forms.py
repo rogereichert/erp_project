@@ -1,5 +1,5 @@
-from django import forms
 from decimal import Decimal
+from django import forms
 from apps.products.models import Product
 
 
@@ -7,7 +7,8 @@ class ProductForm(forms.ModelForm):
     """
     Formulário para criação e edição de produtos.
 
-    Responsável por validar dados comerciais antes de persistir.
+    Responsável por validar dados comerciais e garantir consistência
+    antes de persistir no banco.
     """
 
     class Meta:
@@ -15,7 +16,15 @@ class ProductForm(forms.ModelForm):
         fields = ["sku", "name", "description", "price", "status"]
 
     def clean_sku(self):
+        """
+        Normaliza o SKU para padrão consistente (caixa alta e sem espaços).
+        Também valida duplicidade com mensagem amigável.
+        """
         sku = self.cleaned_data["sku"].strip().upper()
+
+        if Product.objects.filter(sku=sku).exclude(pk=self.instance.pk).exists():
+            raise forms.ValidationError("Já existe um produto com este SKU.")
+
         return sku
 
     def clean_price(self):
