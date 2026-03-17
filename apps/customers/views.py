@@ -57,3 +57,55 @@ class CustomerListView(ListView):
         context["search"] = self.request.GET.get("q", "").strip()
 
         return context
+
+class CustomerCreateView(CreateView):
+    """
+    View responsável pela criação de novos clientes.
+    """
+
+    model = Customer
+    form_class = CustomerForm
+    template_name = "customers/customer_form.html"
+    success_url = reverse_lazy("customers:list")
+
+    def form_valid(self, form):
+        """
+        Exibe mensagem de sucesso após criação.
+        """
+        from django.contrib import messages
+
+        response = super().form_valid(form)
+        messages.success(self.request, "Cliente criado com sucesso.")
+        return response
+
+    def get_context_data(self, **kwargs):
+        """
+        Adiciona título para uso no template.
+        """
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Novo Cliente"
+        return context
+
+
+class CustomerUpdateView(UpdateView):
+    """
+    View responsável pela edição de clientes existentes.
+
+    Reutiliza o mesmo formulário e template da criação,
+    garantindo consistência na interface.
+    """
+    model = Customer
+    form_class = CustomerForm
+    template_name = "customers/customer_form.html"
+    success_url = reverse_lazy("customers:list")  # redirecionamento após atualização
+
+
+class CustomerDeleteView(DeleteView):
+    """
+    View responsável pela exclusão de clientes.
+
+    Exibe uma tela de confirmação antes de remover o registro.
+    """
+    model = Customer
+    template_name = "customers/customer_confirm_delete.html"
+    success_url = reverse_lazy("customers:list")  # redirecionamento após exclusão
