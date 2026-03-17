@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Permite responsividade adequada -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Título dinâmico por página -->
+    <title>{% block title %}ERP{% endblock %}</title>
+
+    <!-- Tailwind via CDN (ok para estudo; em produção usar build) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+    <div class="flex">
+
+        <!-- Sidebar -->
+        <aside class="w-64 bg-slate-900 text-white min-h-screen p-6">
+            <h1 class="text-2xl font-bold mb-8">ERP Study</h1>
+
+            <nav class="space-y-2">
+
+                <!-- Links principais do sistema -->
+                <a href="{% url 'core:dashboard' %}"
+                   class="block px-3 py-2 rounded hover:bg-slate-800 transition">
+                    Dashboard
+                </a>
+
+                <a href="{% url 'customers:list' %}"
+                   class="block px-3 py-2 rounded hover:bg-slate-800 transition">
+                    Clientes
+                </a>
+
+                <a href="{% url 'products:list' %}"
+                   class="block px-3 py-2 rounded hover:bg-slate-800 transition">
+                    Produtos
+                </a>
+
+                <a href="{% url 'orders:list' %}"
+                   class="block px-3 py-2 rounded hover:bg-slate-800 transition">
+                    Pedidos
+                </a>
+
+                <a href="{% url 'inventory:list' %}"
+                   class="block px-3 py-2 rounded hover:bg-slate-800 transition">
+                    Estoque
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Conteúdo principal -->
+        <main class="flex-1 p-8">
+
+            <!-- Mensagens do sistema (Django messages framework) -->
+            {% if messages %}
+                <div class="space-y-2 mb-6">
+                    {% for message in messages %}
+                        <div class="p-3 rounded
+                            {% if message.tags == 'success' %}
+                                bg-green-100 text-green-800
+                            {% elif message.tags == 'error' %}
+                                bg-red-100 text-red-800
+                            {% else %}
+                                bg-blue-100 text-blue-800
+                            {% endif %}
+                        ">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- Conteúdo dinâmico das páginas -->
+            {% block content %}{% endblock %}
+        </main>
+
+    </div>
+</body>
+</html>
