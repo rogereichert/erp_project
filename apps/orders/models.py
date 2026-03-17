@@ -1,6 +1,7 @@
 from django.db import models
 from decimal import Decimal
 from apps.customers.models import Customer
+from apps.products.models import Product
 
 
 class Order(models.Model):
@@ -60,3 +61,52 @@ class Order(models.Model):
         Retorna o valor total do pedido com base na soma dos itens.
         """
         return sum((item.total_price for item in self.items.all()), Decimal("0.00"))
+    
+class OrderItem(models.Model):
+    """
+    Representa um item dentro de um pedido.
+
+    Armazena o produto, quantidade e preço no momento da compra.
+    O preço é armazenado para garantir consistência histórica.
+    """
+
+    order = models.ForeignKey(
+        "Order",
+        on_delete=models.CASCADE,  # ao deletar pedido, remove os itens
+        related_name="items",
+        verbose_name="pedido",
+    )
+
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.PROTECT,  # impede exclusão de produto já vendido
+        related_name="order_items",
+        verbose_name="produto",
+    )
+
+    quantity = models.PositiveIntegerField("quantidade")
+
+    # preço no momento da venda (não depende do produto atual)
+    unit_price = models.DecimalField(
+        "preço unitário",
+        max_digits=10,
+        decimal_places=2,
+    )
+
+    class Meta:
+        verbose_name = "Item do pedido"
+        verbose_name_plural = "Itens do pedido"
+        indexes = [
+            models.Index(fields=["order"]),
+            models.Index(fields=["product"]),
+        ]
+
+    def __str__(self):
+        return f"{self.product.name} - {self.quantity}"
+
+    @property
+    def total_price(self):
+        """
+        Retorna o valor total do item (quantidade x preço unitário).
+        """
+        return self.quantity * self.unit_price
