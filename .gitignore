@@ -1,0 +1,103 @@
+# =========================
+
+# Python
+
+# =========================
+
+**pycache**/
+*.py[cod]
+*$py.class
+
+# =========================
+
+# Virtual Environment
+
+# =========================
+
+.venv/
+venv/
+env/
+
+# =========================
+
+# Django
+
+# =========================
+
+*.log
+db.sqlite3
+media/
+
+# =========================
+
+# Static files (opcional dependendo do setup)
+
+# =========================
+
+staticfiles/
+
+# =========================
+
+# Environment variables
+
+# =========================
+
+.env
+.env.*
+*.env
+
+# =========================
+
+# VSCode / IDE
+
+# =========================
+
+.vscode/
+.idea/
+
+# =========================
+
+# OS files
+
+# =========================
+
+.DS_Store
+Thumbs.db
+
+# =========================
+
+# Migrations (opcional - explicação abaixo)
+
+# =========================
+
+# apps/**/migrations/*.py
+
+# !apps/**/migrations/**init**.py
+
+# =========================
+
+# Coverage / Tests
+
+# =========================
+
+.coverage
+htmlcov/
+.pytest_cache/
+
+# =========================
+
+# Build / Dist
+
+# =========================
+
+build/
+dist/
+*.egg-info/
+
+# =========================
+
+# Node (caso use Tailwind CLI depois)
+
+# =========================
+
+node_modules/
