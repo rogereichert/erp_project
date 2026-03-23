@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Clientes{% endblock %}
+
+{% block content %}
+  <h1>Lista de Clientes</h1>
+
+  <a href="{% url 'customers:create' %}">Novo cliente</a>
+
+  <ul>
+    {% for customer in customers %}
+      <li>
+        {{ customer.name }} - {{ customer.email }}
+        <a href="{% url 'customers:update' customer.pk %}">Editar</a>
+        <a href="{% url 'customers:delete' customer.pk %}">Excluir</a>
+      </li>
+    {% empty %}
+      <li>Nenhum cliente cadastrado.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
